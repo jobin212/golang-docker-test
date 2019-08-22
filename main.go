@@ -6,17 +6,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/gorilla/mux"
 
 	_ "github.com/lib/pq"
 )
-
-type Document struct {
-	Metadata postgres.Jsonb
-	Secrets  postgres.Hstore
-	Body     string
-	ID       int
-}
 
 const (
 	host     = "postgres"
@@ -26,37 +19,45 @@ const (
 	dbname   = "testdb"
 )
 
+var db *sql.DB
+
 func main() {
+	router := mux.NewRouter()
 
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 
-	db, err := sql.Open("postgres", psqlInfo)
+	var err error
+	db, err = sql.Open("postgres", psqlInfo)
 	if err != nil {
 		panic(err)
 	}
 	defer db.Close()
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		err = db.Ping()
-		if err != nil {
-			fmt.Println("ping failed")
-			panic(err)
-		}
-
-		fmt.Fprintf(w, "__")
-	})
-
-	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
-		err = db.Ping()
-		if err != nil {
-			fmt.Println("ping failed")
-			panic(err)
-		}
-
-		fmt.Fprintf(w, "ping succeeded")
-	})
+	router.HandleFunc("/ping", PingDB).Methods("GET")
+	router.HandleFunc("/events", GetEvents).Methods("GET")
+	router.HandleFunc("/", PingDB).Methods("GET")
 
 	fmt.Println("Listening on port 8080-- hello world!")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", router))
+}
+
+func PingDB(w http.ResponseWriter, r *http.Request) {
+	err := db.Ping()
+	if err != nil {
+		fmt.Println("ping failed")
+		panic(err)
+	}
+
+	fmt.Fprintf(w, "ping succeeded")
+}
+
+func GetEvents(w http.ResponseWriter, r *http.Request) {
+	err := db.Ping()
+	if err != nil {
+		fmt.Println("ping failed")
+		panic(err)
+	}
+
+	fmt.Fprintf(w, "events ping succeeded")
 }
