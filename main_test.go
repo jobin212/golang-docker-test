@@ -26,8 +26,6 @@ func TestMain(m *testing.M) {
 	a = App{}
 	a.Initialize(host, port, user, password, dbname)
 
-	ensureTableExists()
-
 	code := m.Run()
 
 	clearTable()
@@ -170,7 +168,7 @@ func addProducts(count int) {
 	}
 
 	for i := 0; i < count; i++ {
-		_, err := a.DB.Exec("INSERT INTO jobin212.products(name, price) VALUES($1, $2)",
+		_, err := a.DB.Exec("INSERT INTO products(name, price) VALUES($1, $2)",
 			"Product "+strconv.Itoa(i), (i + 1.0*10))
 
 		if err != nil {
@@ -192,22 +190,7 @@ func checkResponseCode(t *testing.T, expected, actual int) {
 	}
 }
 
-func ensureTableExists() {
-	if _, err := a.DB.Exec(tableCreationQuery); err != nil {
-		log.Fatal(err)
-	}
-}
-
 func clearTable() {
-	a.DB.Exec("DELETE FROM jobin212.products")
-	a.DB.Exec("ALTER SEQUENCE jobin212.products_id_seq RESTART WITH 1")
+	a.DB.Exec("DELETE FROM products")
+	a.DB.Exec("ALTER SEQUENCE products_id_seq RESTART WITH 1")
 }
-
-// TODO doesn't give permission to user
-const tableCreationQuery = `CREATE TABLE IF NOT EXISTS jobin212.products
-(
-	id SERIAL,
-	name TEXT NOT NULL,
-	price NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
-	CONSTRAINT products_pkey PRIMARY KEY (id)	
-)`

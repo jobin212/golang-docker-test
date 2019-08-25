@@ -1,0 +1,44 @@
+version: "3.5" 
+services: 
+  postgres: 
+    image: crunchydata/crunchy-postgres:centos7-10.4-2.0.0 
+    env_file: 
+      - ./postgres/pg-env.list 
+    volumes: 
+      - pgvolume:/pgdata 
+    ports: 
+      - "5432:5432" 
+    networks: 
+      - pgnetwork 
+
+  pgadmin: 
+    image: crunchydata/crunchy-pgadmin4:centos7-10.4-2.0.0 
+    env_file: 
+      - ./postgres/pgadmin-env.list 
+    volumes: 
+      - pga4volume:/var/lib/pgadmin 
+    ports: 
+      - "5050:5050" 
+    networks: 
+      - pgnetwork 
+
+  test-my-golang-app:
+    build: .
+    ports: 
+      - "8080:8080"
+    depends_on:
+      - "postgres"
+      - "pgadmin"
+    command: ["./wait-for-it.sh", "db:5432", "-t", "3", "--", "go", "test", "-v"]
+    networks:
+      - pgnetwork
+
+
+networks: 
+  pgnetwork:
+    name: pgnetwork
+
+volumes: 
+  pgvolume:
+  pga4volume:
+

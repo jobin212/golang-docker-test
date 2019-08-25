@@ -31,6 +31,8 @@ func (a *App) Initialize(host string, port int, user string, password string, db
 
 	a.Router = mux.NewRouter()
 	a.initializeRoutes()
+
+	a.ensureTableExists()
 }
 
 func (a *App) Run(addr string) {
@@ -160,3 +162,18 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.WriteHeader(code)
 	w.Write(response)
 }
+
+func (a *App) ensureTableExists() {
+	if _, err := a.DB.Exec(tableCreationQuery); err != nil {
+		log.Fatal(err)
+	}
+}
+
+// TODO doesn't give permission to user
+const tableCreationQuery = `CREATE TABLE IF NOT EXISTS products
+(
+	id SERIAL,
+	name TEXT NOT NULL,
+	price NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
+	CONSTRAINT products_pkey PRIMARY KEY (id)	
+)`
