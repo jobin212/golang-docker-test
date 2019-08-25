@@ -21,17 +21,18 @@ services:
       - "5050:5050" 
     networks: 
       - pgnetwork 
-  
-  my-golang-app:
+
+  test-my-golang-app:
     build: .
     ports: 
       - "8080:8080"
     depends_on:
       - "postgres"
       - "pgadmin"
-    command: ["./wait-for-it.sh", "db:5432", "-t", "3", "--", "app"]
+    command: ["./wait-for-it.sh", "db:5432", "-t", "3", "--", "go", "test", "-v"]
     networks:
       - pgnetwork
+
 
 networks: 
   pgnetwork:
