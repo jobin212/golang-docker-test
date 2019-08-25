@@ -12,7 +12,7 @@ type product struct {
 }
 
 func (p *product) getProduct(db *sql.DB) error {
-	return errors.New("Not implemented")
+	return db.QueryRow("Select name, price FROM jobin212.products WHERE id=$1", p.ID).Scan(&p.Name, &p.Price)
 }
 
 func (p *product) updateProduct(db *sql.DB) error {
