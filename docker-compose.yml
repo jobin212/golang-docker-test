@@ -28,7 +28,7 @@ services:
       - "8080:8080"
     depends_on:
       - "postgres"
-    command: ["./wait-for-it.sh", "db:5432", "-t", "5", "--", "go",  "test", "-v"]
+    command: ["./wait-for-it.sh", "db:5432", "-t", "5", "--", "app"]
     networks:
       - pgnetwork
 
