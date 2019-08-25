@@ -1,6 +1,7 @@
 package main // todo should this be main_test?
 
 import (
+	"bytes"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -62,40 +63,40 @@ func TestGetNonExistentProduct(t *testing.T) {
 	}
 }
 
-// func TestCreateProduct(t *testing.T) {
-// 	clearTable()
+func TestCreateProduct(t *testing.T) {
+	clearTable()
 
-// 	// http://polyglot.ninja/golang-making-http-requests/
-// 	payload, err := json.Marshal(map[string]interface{}{
-// 		"name":  "test product",
-// 		"price": 11.22,
-// 	})
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
+	// http://polyglot.ninja/golang-making-http-requests/
+	payload, err := json.Marshal(map[string]interface{}{
+		"name":  "test product",
+		"price": 11.22,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
 
-// 	req, _ := http.NewRequest("POST", "/product", bytes.NewBuffer(payload)) // TODO what is a buffer?
-// 	response := executeRequest(req)
+	req, _ := http.NewRequest("POST", "/product", bytes.NewBuffer(payload)) // TODO what is a buffer?
+	response := executeRequest(req)
 
-// 	checkResponseCode(t, http.StatusCreated, response.Code)
+	checkResponseCode(t, http.StatusCreated, response.Code)
 
-// 	var m map[string]interface{}
-// 	json.Unmarshal(response.Body.Bytes(), &m)
+	var m map[string]interface{}
+	json.Unmarshal(response.Body.Bytes(), &m)
 
-// 	if m["name"] != "test product" {
-// 		t.Errorf("Expected product name to be 'test product'. Got '%v'", m["name"])
-// 	}
+	if m["name"] != "test product" {
+		t.Errorf("Expected product name to be 'test product'. Got '%v'", m["name"])
+	}
 
-// 	if m["price"] != 11.22 {
-// 		t.Errorf("Expected product price to be '11.22'. Got '%v'", m["price"])
-// 	}
+	if m["price"] != 11.22 {
+		t.Errorf("Expected product price to be '11.22'. Got '%v'", m["price"])
+	}
 
-// 	// the id is compared to 1.0 because JSON unmarshaling converts numbers to
-// 	// floats, when the target is a map[string]interface{}
-// 	if m["id"] != 1.0 {
-// 		t.Errorf("Expected product ID to be '1'. Got '%v'", m["id"])
-// 	}
-// }
+	// the id is compared to 1.0 because JSON unmarshaling converts numbers to
+	// floats, when the target is a map[string]interface{}
+	if m["id"] != 1.0 {
+		t.Errorf("Expected product ID to be '1'. Got '%v'", m["id"])
+	}
+}
 
 func TestGetProduct(t *testing.T) {
 	clearTable()
@@ -169,7 +170,6 @@ func addProducts(count int) {
 	}
 
 	for i := 0; i < count; i++ {
-		log.Println("inserting into db...")
 		_, err := a.DB.Exec("INSERT INTO jobin212.products(name, price) VALUES($1, $2)",
 			"Product "+strconv.Itoa(i), (i + 1.0*10))
 

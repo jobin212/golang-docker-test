@@ -39,7 +39,25 @@ func (a *App) Run(addr string) {
 
 func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/products", a.getProducts).Methods("GET")
+	a.Router.HandleFunc("/product", a.createProduct).Methods("POST")
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.getProduct).Methods("GET")
+}
+
+func (a *App) createProduct(w http.ResponseWriter, r *http.Request) {
+	var p product
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&p); err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Invalid request payload")
+		return
+	}
+	defer r.Body.Close()
+
+	if err := p.createProduct(a.DB); err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusCreated, p)
 }
 
 func (a *App) getProducts(w http.ResponseWriter, r *http.Request) {
