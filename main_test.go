@@ -34,18 +34,18 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-// func TestEmptyTable(t *testing.T) {
-// 	clearTable()
+func TestEmptyTable(t *testing.T) {
+	clearTable()
 
-// 	req, _ := http.NewRequest("GET", "/products", nil)
-// 	response := executeRequest(req)
+	req, _ := http.NewRequest("GET", "/products", nil)
+	response := executeRequest(req)
 
-// 	checkResponseCode(t, http.StatusOK, response.Code)
+	checkResponseCode(t, http.StatusOK, response.Code)
 
-// 	if body := response.Body.String(); body != "[]" {
-// 		t.Errorf("Expected an empty array. Got %s", body)
-// 	}
-// }
+	if body := response.Body.String(); body != "[]" {
+		t.Errorf("Expected an empty array. Got %s", body)
+	}
+}
 
 func TestGetNonExistentProduct(t *testing.T) {
 	clearTable()
