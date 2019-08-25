@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"log"
 
 	_ "github.com/lib/pq"
 )
@@ -21,5 +22,6 @@ func main() {
 	a := App{}
 	a.Initialize(host, port, user, password, dbname)
 
+	log.Println("running on port 8080...")
 	a.Run(":8080")
 }
