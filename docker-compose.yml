@@ -3,7 +3,7 @@ services:
   postgres: 
     image: postgres
     env_file: 
-      - ./config/pg-env.list
+      - ./config/pg-test-env.list
     volumes: 
       - pgvolume:/var/lib/postgresql/data 
     ports: 
@@ -26,7 +26,7 @@ services:
   my-golang-app:
     build: .
     env_file:
-      - ./config/golang-env.list
+      - ./config/golang-test-env.list
     ports: 
       - "8080:8080"
     depends_on:
