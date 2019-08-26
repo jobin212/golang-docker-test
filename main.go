@@ -3,23 +3,24 @@ package main
 import (
 	"database/sql"
 	"log"
+	"os"
+	"strconv"
 
 	_ "github.com/lib/pq"
-)
-
-// TODO move consts to docker file
-const (
-	host     = "postgres"
-	port     = 5432
-	user     = "postgres"
-	password = "p@ssword1"
-	dbname   = "testdb"
 )
 
 var db *sql.DB
 
 func main() {
 	a := App{}
+
+	// get environmental variables
+	host := os.Getenv("HOST")
+	port, _ := strconv.Atoi(os.Getenv("PORT"))
+	user := os.Getenv("USER")
+	password := os.Getenv("PASSWORD")
+	dbname := os.Getenv("DBNAME")
+
 	a.Initialize(host, port, user, password, dbname)
 
 	log.Println("running on port 8080...")

@@ -10,7 +10,8 @@ Downloads required: clone the repo and docker (that's it!)
 - run tests: docker-compose -f docker-compose.test.yml up
 
 ## TODO 
-- persist database
-- load environment variables securely
+- persist database ✅
+- load environment variables securely ✅ ? (not sure if secure, but at least we're using config files)
 - make it so you don't have to download go packages every time
-- get pgadmin working
+- get pgadmin working ✅
+- ship!

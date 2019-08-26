@@ -1,29 +1,32 @@
 version: "3.5" 
 services: 
   postgres: 
-    image: crunchydata/crunchy-postgres:centos7-10.4-2.0.0 
+    image: postgres
     env_file: 
-      - ./postgres/pg-env.list 
+      - ./config/pg-env.list
     volumes: 
-      - pgvolume:/pgdata 
+      - pgvolume:/var/lib/postgresql/data 
     ports: 
       - "5432:5432" 
     networks: 
       - pgnetwork 
 
   pgadmin: 
+    # TODO move to normal pgadmin image
     image: crunchydata/crunchy-pgadmin4:centos7-10.4-2.0.0 
     env_file: 
-      - ./postgres/pgadmin-env.list 
+      - ./config/pgadmin-env.list 
     volumes: 
       - pga4volume:/var/lib/pgadmin 
     ports: 
       - "5050:5050" 
     networks: 
       - pgnetwork 
-
-  test-my-golang-app:
+  
+  my-golang-app:
     build: .
+    env_file:
+      - ./config/golang-test-env.list
     ports: 
       - "8080:8080"
     depends_on:
@@ -33,12 +36,13 @@ services:
     networks:
       - pgnetwork
 
-
 networks: 
   pgnetwork:
     name: pgnetwork
 
 volumes: 
   pgvolume:
+    name: pgvolume
   pga4volume:
+    name: pga4volume
 

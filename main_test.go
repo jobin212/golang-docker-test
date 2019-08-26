@@ -11,19 +11,18 @@ import (
 	"testing"
 )
 
-// TODO move consts to docker file
-const (
-	test_host     = "postgres"
-	test_port     = 5432
-	test_user     = "postgres"
-	test_password = "p@ssword1"
-	test_dbname   = "testdb"
-)
-
 var a App
 
 func TestMain(m *testing.M) {
 	a = App{}
+
+	// get environmental variables
+	host := os.Getenv("HOST")
+	port, _ := strconv.Atoi(os.Getenv("PORT"))
+	user := os.Getenv("USER")
+	password := os.Getenv("PASSWORD")
+	dbname := os.Getenv("DBNAME")
+
 	a.Initialize(host, port, user, password, dbname)
 
 	code := m.Run()
