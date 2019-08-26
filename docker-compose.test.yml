@@ -42,7 +42,7 @@ networks:
 
 volumes: 
   pgvolume:
-    name: pgvolume
+    name: pgvolume-test
   pga4volume:
-    name: pga4volume
+    name: pga4volume-test
 
