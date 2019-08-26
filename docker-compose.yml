@@ -1,17 +1,18 @@
 version: "3.5" 
 services: 
   postgres: 
-    image: crunchydata/crunchy-postgres:centos7-10.4-2.0.0 
+    image: postgres
     env_file: 
-      - ./postgres/pg-env.list 
+      - ./postgres/pg-env2.list
     volumes: 
-      - pgvolume:/pgdata 
+      - pgvolume:/var/lib/postgresql/data 
     ports: 
       - "5432:5432" 
     networks: 
       - pgnetwork 
 
   pgadmin: 
+    # TODO move to normal pgadmin image
     image: crunchydata/crunchy-pgadmin4:centos7-10.4-2.0.0 
     env_file: 
       - ./postgres/pgadmin-env.list 
@@ -39,5 +40,7 @@ networks:
 
 volumes: 
   pgvolume:
+    name: pgvolume
   pga4volume:
+    name: pga4volume
 

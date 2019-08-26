@@ -14,4 +14,3 @@ Downloads required: clone the repo and docker (that's it!)
 - load environment variables securely
 - make it so you don't have to download go packages every time
 - get pgadmin working
-
