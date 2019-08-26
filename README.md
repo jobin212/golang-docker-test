@@ -8,6 +8,8 @@ This is just a repo to help me learn golang, mux, docker, postgresql, pgadmin an
 ## First run
 - set up config files in ./config
 - docker-compose up (that's it!)
+- send requests to localhost:8080
+  - I recommend using postman https://www.getpostman.com/
 
 ## Developer Workflow
 - Make a change
@@ -43,4 +45,8 @@ This is just a repo to help me learn golang, mux, docker, postgresql, pgadmin an
 - get pgadmin working ✅
 - make it so you don't have to download go packages on every build
 - make it so you don't have to manually build on every code change
+- create walkthrough without my username
+- automated ci
+- add github badges
+- open source 🚀
 - ship!
